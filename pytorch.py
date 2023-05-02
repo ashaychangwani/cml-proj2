@@ -78,7 +78,7 @@ for kinase_number in range(len(X[0])):
         error_increase_list.append(error_increase)
     mean_error = mean(error_increase_list)
     results.append(mean_error)
-    print(kinase_number)
+    print(kinase_number,'/',len(X[0]))
 
 results_df = pd.DataFrame(results)
 results_df["genes"] = matrix["Gene"]
