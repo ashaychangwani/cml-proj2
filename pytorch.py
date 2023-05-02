@@ -46,6 +46,14 @@ X = torch.tensor(X)
 y = y.astype(np.float32)
 y = torch.tensor(y).view(-1, 1)
 
+# Check if CUDA is available and set the device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+# Move the model and data to the specified device
+classifier = classifier.to(device)
+X = X.to(device)
+y = y.to(device)
+
 for epoch in range(45):
     optimizer.zero_grad()
     outputs = classifier(X)
@@ -63,16 +71,16 @@ def cross_entropy(pred, target, epsilon=1e-12):
 #Gene Importance
 results = []
 
-y_pred_base = classifier(X).data.numpy()
-y_true = y.data.numpy().tolist()
+y_pred_base = classifier(X).data.cpu().numpy()
+y_true = y.data.cpu().numpy().tolist()
 base_score = cross_entropy(y_pred_base, y_true)
 for kinase_number in range(len(X[0])):
     error_increase_list = []
-    X_copy = X.clone().detach().numpy()
+    X_copy = X.clone().detach().cpu().numpy()
     for shuffle_number in range (100):
         np.random.shuffle(X_copy[:,kinase_number])
-        X_shuffle = torch.tensor(X_copy, dtype=torch.float32)
-        y_pred_new = classifier(X_shuffle).data.numpy()
+        X_shuffle = torch.tensor(X_copy, dtype=torch.float32).to(device)
+        y_pred_new = classifier(X_shuffle).data.cpu().numpy()
         new_score = cross_entropy(y_pred_new, y_true)
         error_increase = new_score - base_score
         error_increase_list.append(error_increase)
