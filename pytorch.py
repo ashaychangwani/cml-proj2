@@ -44,7 +44,7 @@ classifier, criterion, optimizer = build_classifier()
 X = X.astype(np.float32)
 X = torch.tensor(X)
 y = y.astype(np.float32)
-y = torch.tensor(y)
+y = torch.tensor(y).view(-1, 1)
 
 for epoch in range(45):
     optimizer.zero_grad()
