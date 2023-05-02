@@ -47,7 +47,12 @@ y = y.astype(np.float32)
 y = torch.tensor(y).view(-1, 1)
 
 # Check if CUDA is available and set the device
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+print('Running on device:', device)
+
+# Print the GPU name if CUDA is available
+if torch.cuda.is_available():
+    print('GPU name:', torch.cuda.get_device_name(device))
 
 # Move the model and data to the specified device
 classifier = classifier.to(device)
@@ -89,7 +94,7 @@ for kinase_number in range(len(X[0])):
     print(kinase_number,'/',len(X[0]))
 
 results_df = pd.DataFrame(results)
-results_df["genes"] = matrix["Gene"]
+results_df['genes'] = matrix['Gene']
 
 #Export to excel
-results_df.to_excel("gene_importance.xlsx", sheet_name='1')
+results_df.to_excel('gene_importance.xlsx', sheet_name='1')
