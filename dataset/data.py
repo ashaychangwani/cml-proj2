@@ -23,11 +23,6 @@ def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128,
     ])
     train_dataset = torchvision.datasets.CIFAR100(root=data_dir, train=True, 
                                                  download=True, transform=train_transform)
-    train_loader = torch.utils.data.DataLoader(train_dataset, 
-                                                batch_size=batch_size, 
-                                                shuffle=shuffle, 
-                                                num_workers=num_workers, 
-                                                pin_memory=pin_memory)
     return train_dataset
 
 def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128, 
@@ -43,9 +38,4 @@ def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128,
                                                train=False,
                                                download=True,
                                                transform=transform_test) 
-    test_loader = torch.utils.data.DataLoader(testset,
-                                                batch_size=batch_size,
-                                                shuffle=shuffle,
-                                                num_workers=num_workers,
-                                                pin_memory=pin_memory)  
     return testset
