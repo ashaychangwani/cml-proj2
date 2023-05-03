@@ -250,22 +250,23 @@ def run_training(args):
             batch_time.update(time.time() - end)
             end = time.time()
 
-            if i % args.print_freq == 0 and writer is not None:
-                writer.add_scalar('loss', losses.avg, step)
-                writer.add_scalar('middle1_loss', middle1_losses.avg, step)
-                writer.add_scalar('middle2_loss', middle2_losses.avg, step)
-                writer.add_scalar('middle3_loss', middle3_losses.avg, step)
-                writer.add_scalar('loss1_kd', losses1_kd.avg, step)
-                writer.add_scalar('loss2_kd', losses2_kd.avg, step)
-                writer.add_scalar('loss3_kd', losses3_kd.avg, step)
-                writer.add_scalar('total_loss', total_losses.avg, step)
-                writer.add_scalar('accuracy', top1.avg, step)
-                writer.add_scalar('middle1_acc', middle1_top1.avg, step)
-                writer.add_scalar('middle2_acc', middle2_top1.avg, step)
-                writer.add_scalar('middle3_acc', middle3_top1.avg, step)
-                writer.add_scalar('feature_loss_1', feature_losses_1.avg, step)
-                writer.add_scalar('feature_loss_2', feature_losses_2.avg, step)
-                writer.add_scalar('feature_loss_3', feature_losses_3.avg, step)
+            if i % args.print_freq == 0:
+                if writer is not None:
+                    writer.add_scalar('loss', losses.avg, step)
+                    writer.add_scalar('middle1_loss', middle1_losses.avg, step)
+                    writer.add_scalar('middle2_loss', middle2_losses.avg, step)
+                    writer.add_scalar('middle3_loss', middle3_losses.avg, step)
+                    writer.add_scalar('loss1_kd', losses1_kd.avg, step)
+                    writer.add_scalar('loss2_kd', losses2_kd.avg, step)
+                    writer.add_scalar('loss3_kd', losses3_kd.avg, step)
+                    writer.add_scalar('total_loss', total_losses.avg, step)
+                    writer.add_scalar('accuracy', top1.avg, step)
+                    writer.add_scalar('middle1_acc', middle1_top1.avg, step)
+                    writer.add_scalar('middle2_acc', middle2_top1.avg, step)
+                    writer.add_scalar('middle3_acc', middle3_top1.avg, step)
+                    writer.add_scalar('feature_loss_1', feature_losses_1.avg, step)
+                    writer.add_scalar('feature_loss_2', feature_losses_2.avg, step)
+                    writer.add_scalar('feature_loss_3', feature_losses_3.avg, step)
                 
                 step += 1
                 logging.info("Epoch: [{0}]\t"
