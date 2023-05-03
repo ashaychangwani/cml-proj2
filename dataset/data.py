@@ -21,8 +21,8 @@ def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128,
         transforms.Normalize(mean=[0.4914, 0.4822, 0.4465],
                              std=[0.2023, 0.1994, 0.2010]),
     ])
-    train_dataset = torchvision.datasets.ImageNet(root=data_dir, train=True, 
-                                                 download=True, transform=train_transform)
+    train_dataset = torchvision.datasets.ImageNet(root=data_dir, split='train',
+                                                  download=True, transform=train_transform)
     return train_dataset
 
 def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128, 
@@ -34,8 +34,6 @@ def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128,
             transforms.Normalize(mean=[0.4914, 0.4822, 0.4465],
                                  std=[0.2023, 0.1994, 0.2010]),
         ])
-    testset = torchvision.datasets.ImageNet(root=data_dir,
-                                               train=False,
-                                               download=True,
-                                               transform=transform_test) 
+    testset = torchvision.datasets.ImageNet(root=data_dir, split='test',
+                                                  download=True, transform=train_transform)
     return testset
