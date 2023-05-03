@@ -209,9 +209,6 @@ def run_training(args):
             scaler.scale(total_loss).backward()
             scaler.step(optimizer)
             scaler.update()
-
-            
-            total_loss.backward()
             optimizer.step()
 
             batch_time.update(time.time() - end)
