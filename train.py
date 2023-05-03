@@ -85,6 +85,10 @@ def main():
     mp.spawn(run, nprocs=num_gpus, args=(args,))
 
 def run(rank, args):
+    os.environ['MASTER_ADDR'] = 'localhost'
+    os.environ['MASTER_PORT'] = '29500'
+    os.environ['RANK'] = str(rank)
+    os.environ['WORLD_SIZE'] = str(args.world_size)
     # Initialize the distributed process group
     dist.init_process_group(backend='nccl', init_method='env://')
 
