@@ -31,5 +31,5 @@ def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128,
             transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                 std=[0.229, 0.224, 0.225]),
         ])
-    testset = torchvision.datasets.ImageNet(root=data_dir, split='test', transform=test_transform)
+    testset = torchvision.datasets.ImageNet(root=data_dir, split='val', transform=test_transform)
     return testset
