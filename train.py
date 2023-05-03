@@ -81,7 +81,7 @@ def main():
     args = parse_args()
     num_gpus = torch.cuda.device_count()
     args.world_size = num_gpus
-
+    print("Number of GPUs is",num_gpus)
     mp.spawn(run, nprocs=num_gpus, args=(args,))
 
 def run(rank, args):
@@ -144,7 +144,7 @@ def run_training(args):
                                                         num_workers=args.workers, pin_memory=True)
     else:
         raise NotImplementedError
-        
+
     # Wrap the datasets with DistributedSampler
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
     test_sampler = torch.utils.data.distributed.DistributedSampler(test_dataset)
