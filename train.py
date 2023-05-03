@@ -120,7 +120,10 @@ def main_worker(rank, args):
             args.arch, args.resume))
         run_test(args)
 def run_training(args):
-    writer = SummaryWriter(args.summary_folder)
+    if args.device == 0:  # Create the SummaryWriter only for the main process
+        writer = SummaryWriter(args.summary_folder)
+    else:
+        writer = None
     if args.dataset == 'cifar100':
         model = models.__dict__[args.arch](num_classes=100)
     else:
@@ -247,7 +250,7 @@ def run_training(args):
             batch_time.update(time.time() - end)
             end = time.time()
 
-            if i % args.print_freq == 0:
+            if i % args.print_freq == 0 and writer is not None:
                 writer.add_scalar('loss', losses.avg, step)
                 writer.add_scalar('middle1_loss', middle1_losses.avg, step)
                 writer.add_scalar('middle2_loss', middle2_losses.avg, step)
