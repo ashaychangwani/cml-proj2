@@ -10,7 +10,7 @@ crop_size = 32
 padding = 4
 
 def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128, 
-                                    shuffle=True, num_workers=4, pin_memory=True):
+                                    shuffle=True, num_workers=4):
 
     train_transform = transforms.Compose([
         transforms.RandomCrop(crop_size, padding),
@@ -27,11 +27,11 @@ def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128,
                                                 batch_size=batch_size, 
                                                 shuffle=shuffle, 
                                                 num_workers=num_workers, 
-                                                pin_memory=pin_memory)
+                                                pin_memory=False)
     return train_loader
 
 def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128, 
-                                    shuffle=False, num_workers=4, pin_memory=True):
+                                    shuffle=False, num_workers=4):
     transform_test = transforms.Compose([
             transforms.ToTensor(),
             # transforms.Normalize(mean=[0.5071, 0.4865, 0.4409],
@@ -47,5 +47,5 @@ def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128,
                                                 batch_size=batch_size,
                                                 shuffle=shuffle,
                                                 num_workers=num_workers,
-                                                pin_memory=pin_memory)  
+                                                pin_memory=False)  
     return test_loader
