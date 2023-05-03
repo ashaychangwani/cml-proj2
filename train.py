@@ -125,7 +125,7 @@ def run_training(args):
         model = models.__dict__[args.arch](num_classes=100)
     else:
         raise NotImplementedError
-    model.to(arg.device)
+    model.to(args.device)
     model = DDP(model, device_ids=[args.device], output_device=args.device)
     best_prec1 = 0
 
@@ -143,9 +143,9 @@ def run_training(args):
     
     cudnn.benchmark = True
     if args.dataset == 'cifar100':
-        train_loader = prepare_cifar100_train_dataset(data_dir=args.data_dir, batch_size=args.batch_size, 
+        train_dataset = prepare_cifar100_train_dataset(data_dir=args.data_dir, batch_size=args.batch_size, 
                                                         num_workers=args.workers, pin_memory=True)
-        test_loader = prepare_cifar100_test_dataset(data_dir=args.data_dir, batch_size=args.batch_size, 
+        test_dataset = prepare_cifar100_test_dataset(data_dir=args.data_dir, batch_size=args.batch_size, 
                                                         num_workers=args.workers, pin_memory=True)
     else:
         raise NotImplementedError
