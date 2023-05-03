@@ -188,6 +188,7 @@ def run_training(args):
 
         adjust_learning_rate(args, optimizer, current_epoch)
         for i, (input, target) in enumerate(train_loader):
+            print("Length of train_loader is",len(train_loader))
             data_time.update(time.time() - end)
             
             target = target.squeeze().long().to(args.device)
