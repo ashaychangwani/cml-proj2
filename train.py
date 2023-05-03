@@ -17,6 +17,11 @@ from dataset.data import *
 from tensorboardX import SummaryWriter 
 import numpy as np
 
+import torch.distributed as dist
+import torch.multiprocessing as mp
+import torch.utils.data.distributed
+from torch.nn.parallel import DistributedDataParallel as DDP
+
 def parse_args():
     # hyper-parameters are from ResNet paper
     parser = argparse.ArgumentParser(description='PyTorch CIFAR10 training')
@@ -74,6 +79,23 @@ def parse_args():
 
 def main():
     args = parse_args()
+    num_gpus = torch.cuda.device_count()
+    args.world_size = num_gpus
+
+    mp.spawn(run, nprocs=num_gpus, args=(args,))
+
+def run(rank, args):
+    # Initialize the distributed process group
+    dist.init_process_group(backend='nccl', init_method='env://')
+
+    # Set the device for the current process
+    torch.cuda.set_device(rank)
+    args.device = f'cuda:{rank}'
+
+    # Call the existing main function
+    main_worker(rank, args)
+
+def main_worker(rank, args):
     save_path = args.save_path = os.path.join(args.save_folder, args.arch)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
@@ -93,14 +115,13 @@ def main():
         logging.info('start evaluating {} with checkpoints from {}'.format(
             args.arch, args.resume))
         run_test(args)
-
 def run_training(args):
     writer = SummaryWriter(args.summary_folder)
     if args.dataset == 'cifar100':
         model = models.__dict__[args.arch](num_classes=100)
     else:
         raise NotImplementedError
-    model = torch.nn.DataParallel(model).to(args.device)
+    model = DDP(model).to(args.device)
     best_prec1 = 0
 
     if args.resume:
@@ -123,7 +144,14 @@ def run_training(args):
                                                         num_workers=args.workers, pin_memory=True)
     else:
         raise NotImplementedError
-   
+        
+    # Wrap the datasets with DistributedSampler
+    train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
+    test_sampler = torch.utils.data.distributed.DistributedSampler(test_dataset)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, num_workers=args.workers,
+                                               pin_memory=True, sampler=train_sampler)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, num_workers=args.workers,
+                                              pin_memory=True, sampler=test_sampler)
     criterion = nn.CrossEntropyLoss().to(args.device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay = args.weight_decay)
 
