@@ -125,7 +125,8 @@ def run_training(args):
         model = models.__dict__[args.arch](num_classes=100)
     else:
         raise NotImplementedError
-    model = DDP(model).to(args.device)
+    model.to(arg.device)
+    model = DDP(model, device_ids=[args.device], output_device=args.device)
     best_prec1 = 0
 
     if args.resume:
