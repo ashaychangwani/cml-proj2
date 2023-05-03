@@ -40,7 +40,7 @@ def parse_args():
                         help='number of total iterations (default: 64,000)')
     parser.add_argument('--start-epoch', default=0, type=int,
                         help='manual iter number (useful on restarts)')
-    parser.add_argument('--batch-size', default=128, type=int,
+    parser.add_argument('--batch-size', default=256, type=int,
                         help='mini-batch size (default: 128)')
     parser.add_argument('--lr', default=0.1, type=float,
                         help='initial learning rate')
