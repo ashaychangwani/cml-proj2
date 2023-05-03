@@ -28,7 +28,7 @@ def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128,
                                                 shuffle=shuffle, 
                                                 num_workers=num_workers, 
                                                 pin_memory=pin_memory)
-    return train_loader
+    return train_dataset
 
 def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128, 
                                     shuffle=False, num_workers=4, pin_memory=True):
@@ -48,4 +48,4 @@ def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128,
                                                 shuffle=shuffle,
                                                 num_workers=num_workers,
                                                 pin_memory=pin_memory)  
-    return test_loader
+    return testset
