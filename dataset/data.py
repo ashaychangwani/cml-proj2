@@ -13,27 +13,23 @@ def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128,
                                     shuffle=True, num_workers=4, pin_memory=True):
 
     train_transform = transforms.Compose([
-        transforms.RandomCrop(crop_size, padding),
+        transforms.RandomResizedCrop(224),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        # transforms.Normalize(mean=[0.5071, 0.4865, 0.4409],
-        #                      std=[0.2673, 0.2564, 0.2762]),
-        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465],
-                             std=[0.2023, 0.1994, 0.2010]),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                            std=[0.229, 0.224, 0.225]),
     ])
-    train_dataset = torchvision.datasets.ImageNet(root=data_dir, split='train',
-                                                  download=True, transform=train_transform)
+    train_dataset = torchvision.datasets.ImageNet(root=data_dir, split='train', transform=train_transform)
     return train_dataset
 
 def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128, 
                                     shuffle=False, num_workers=4, pin_memory=True):
-    transform_test = transforms.Compose([
+    test_transform = transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
             transforms.ToTensor(),
-            # transforms.Normalize(mean=[0.5071, 0.4865, 0.4409],
-            #                      std=[0.2673, 0.2564, 0.2762]),
-            transforms.Normalize(mean=[0.4914, 0.4822, 0.4465],
-                                 std=[0.2023, 0.1994, 0.2010]),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                std=[0.229, 0.224, 0.225]),
         ])
-    testset = torchvision.datasets.ImageNet(root=data_dir, split='test',
-                                                  download=True, transform=train_transform)
+    testset = torchvision.datasets.ImageNet(root=data_dir, split='test', transform=test_transform)
     return testset
