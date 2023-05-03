@@ -1,0 +1,11 @@
+.vscode/launch.json
+dataset/cifar-100-python.tar.gz
+dataset/__pycache__/data.cpython-310.pyc
+dataset/cifar-100-python/file.txt~
+dataset/cifar-100-python/meta
+dataset/cifar-100-python/test
+dataset/cifar-100-python/train
+runs_alpha01/*
+save_checkpoints/*
+dataset/__pycache__/
+models/__pycache__/
