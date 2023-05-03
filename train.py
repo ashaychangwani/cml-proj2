@@ -129,7 +129,7 @@ def run_training(args):
     else:
         raise NotImplementedError
     model.to(args.device)
-    model = DDP(model, device_ids=[args.device], output_device=args.device)
+    model = DDP(model, device_ids=[args.device], output_device=args.device, find_unused_parameters=True)
     best_prec1 = 0
 
     if args.resume:
