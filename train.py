@@ -98,6 +98,7 @@ def run(rank, args):
 
     # Call the existing main function
     main_worker(rank, args)
+    print("Main worker done",rank)
 
 def main_worker(rank, args):
     save_path = args.save_path = os.path.join(args.save_folder, args.arch)
@@ -114,6 +115,7 @@ def main_worker(rank, args):
     if args.cmd == 'train':
         logging.info('start training {}'.format(args.arch))
         run_training(args)
+        print("Done training")
     
     elif args.cmd == 'test':
         logging.info('start evaluating {} with checkpoints from {}'.format(
@@ -285,6 +287,7 @@ def run_training(args):
                                 loss=total_losses,
                                 top1=top1)
                 ) 
+        print("Done with epochs")
         # prec1 = validate(args, test_loader, model, criterion, writer, current_epoch)
         # is_best = prec1 > best_prec1
         # best_prec1 = max(prec1, best_prec1)
@@ -298,6 +301,7 @@ def run_training(args):
         #     }, is_best, filename=checkpoint_path)
         # shutil.copyfile(checkpoint_path, os.path.join(args.save_path, 'checkpoint_latest.pth.tar'))
         torch.cuda.empty_cache()
+        print("Done clearing cache")
 
 
         
