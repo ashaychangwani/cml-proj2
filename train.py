@@ -233,13 +233,14 @@ def run_training(args):
                 
                 step += 1
                 logging.info("Epoch: [{0}]\t"
-                            "Iter: [{1}]\t"
+                            "Iter: [{1}] / {2}\t"
                             "Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
                             "Data {data_time.val:.3f} ({data_time.avg:.3f})\t"
                             "Loss {loss.val:.3f} ({loss.avg:.3f})\t"
                             "Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t".format(
                                 current_epoch,
                                 i,
+                                len(train_loader),
                                 batch_time=batch_time,
                                 data_time=data_time,
                                 loss=total_losses,
