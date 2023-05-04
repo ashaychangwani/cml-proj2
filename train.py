@@ -197,54 +197,54 @@ def run_training(args):
             
             target = target.squeeze().long().to(args.device)
             input = input.to(args.device)
-            with autocast():
-                output, middle_output1, middle_output2, middle_output3, \
-                final_fea, middle1_fea, middle2_fea, middle3_fea = model(input)
-                
-                loss = criterion(output, target)
-                losses.update(loss.item(), input.size(0))
+            
+            output, middle_output1, middle_output2, middle_output3, \
+            final_fea, middle1_fea, middle2_fea, middle3_fea = model(input)
+            
+            loss = criterion(output, target)
+            losses.update(loss.item(), input.size(0))
 
-                middle1_loss = criterion(middle_output1, target)
-                middle1_losses.update(middle1_loss.item(), input.size(0))
-                middle2_loss = criterion(middle_output2, target)
-                middle2_losses.update(middle2_loss.item(), input.size(0))
-                middle3_loss = criterion(middle_output3, target)
-                middle3_losses.update(middle3_loss.item(), input.size(0))
+            middle1_loss = criterion(middle_output1, target)
+            middle1_losses.update(middle1_loss.item(), input.size(0))
+            middle2_loss = criterion(middle_output2, target)
+            middle2_losses.update(middle2_loss.item(), input.size(0))
+            middle3_loss = criterion(middle_output3, target)
+            middle3_losses.update(middle3_loss.item(), input.size(0))
 
-                temp4 = output / args.temperature
-                temp4 = torch.softmax(temp4, dim=1)
-                
-                
-                loss1by4 = kd_loss_function(middle_output1, temp4.detach(), args) * (args.temperature**2)
-                losses1_kd.update(loss1by4, input.size(0))
-                
-                loss2by4 = kd_loss_function(middle_output2, temp4.detach(), args) * (args.temperature**2)
-                losses2_kd.update(loss2by4, input.size(0))
-                
-                loss3by4 = kd_loss_function(middle_output3, temp4.detach(), args) * (args.temperature**2)
-                losses3_kd.update(loss3by4, input.size(0))
-                
-                feature_loss_1 = feature_loss_function(middle1_fea, final_fea.detach()) 
-                feature_losses_1.update(feature_loss_1, input.size(0))
-                feature_loss_2 = feature_loss_function(middle2_fea, final_fea.detach()) 
-                feature_losses_2.update(feature_loss_2, input.size(0))
-                feature_loss_3 = feature_loss_function(middle3_fea, final_fea.detach()) 
-                feature_losses_3.update(feature_loss_3, input.size(0))
+            temp4 = output / args.temperature
+            temp4 = torch.softmax(temp4, dim=1)
+            
+            
+            loss1by4 = kd_loss_function(middle_output1, temp4.detach(), args) * (args.temperature**2)
+            losses1_kd.update(loss1by4, input.size(0))
+            
+            loss2by4 = kd_loss_function(middle_output2, temp4.detach(), args) * (args.temperature**2)
+            losses2_kd.update(loss2by4, input.size(0))
+            
+            loss3by4 = kd_loss_function(middle_output3, temp4.detach(), args) * (args.temperature**2)
+            losses3_kd.update(loss3by4, input.size(0))
+            
+            feature_loss_1 = feature_loss_function(middle1_fea, final_fea.detach()) 
+            feature_losses_1.update(feature_loss_1, input.size(0))
+            feature_loss_2 = feature_loss_function(middle2_fea, final_fea.detach()) 
+            feature_losses_2.update(feature_loss_2, input.size(0))
+            feature_loss_3 = feature_loss_function(middle3_fea, final_fea.detach()) 
+            feature_losses_3.update(feature_loss_3, input.size(0))
 
-                total_loss = (1 - args.alpha) * (loss + middle1_loss + middle2_loss + middle3_loss) + \
-                            args.alpha * (loss1by4 + loss2by4 + loss3by4) + \
-                            args.beta * (feature_loss_1 + feature_loss_2 + feature_loss_3)
-                total_losses.update(total_loss.item(), input.size(0))
-                
-                prec1 = accuracy(output.data, target, topk=(1,))
-                top1.update(prec1[0], input.size(0))
+            total_loss = (1 - args.alpha) * (loss + middle1_loss + middle2_loss + middle3_loss) + \
+                        args.alpha * (loss1by4 + loss2by4 + loss3by4) + \
+                        args.beta * (feature_loss_1 + feature_loss_2 + feature_loss_3)
+            total_losses.update(total_loss.item(), input.size(0))
+            
+            prec1 = accuracy(output.data, target, topk=(1,))
+            top1.update(prec1[0], input.size(0))
 
-                middle1_prec1 = accuracy(middle_output1.data, target, topk=(1,))
-                middle1_top1.update(middle1_prec1[0], input.size(0))
-                middle2_prec1 = accuracy(middle_output2.data, target, topk=(1,))
-                middle2_top1.update(middle2_prec1[0], input.size(0))
-                middle3_prec1 = accuracy(middle_output3.data, target, topk=(1,))
-                middle3_top1.update(middle3_prec1[0], input.size(0))
+            middle1_prec1 = accuracy(middle_output1.data, target, topk=(1,))
+            middle1_top1.update(middle1_prec1[0], input.size(0))
+            middle2_prec1 = accuracy(middle_output2.data, target, topk=(1,))
+            middle2_top1.update(middle2_prec1[0], input.size(0))
+            middle3_prec1 = accuracy(middle_output3.data, target, topk=(1,))
+            middle3_top1.update(middle3_prec1[0], input.size(0))
 
             optimizer.zero_grad()
             scaler.scale(total_loss).backward()
