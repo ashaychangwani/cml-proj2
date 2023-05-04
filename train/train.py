@@ -23,7 +23,7 @@ def parse_args():
                         help='number of data loading workers (default: 4 )')
     parser.add_argument('--epoch', default=200, type=int,
                         help='number of total iterations (default: 64,000)')
-    parser.add_argument('--start-epoch', default=0, type=int,
+    parser.add_argument('--start-epoch', default=30, type=int,
                         help='manual iter number (useful on restarts)')
     parser.add_argument('--batch-size', default=32, type=int,
                         help='mini-batch size (default: 128)')
@@ -35,7 +35,7 @@ def parse_args():
                         help='weight decay (default: 1e-4)')
     parser.add_argument('--print-freq', default=100, type=int,
                         help='print frequency (default: 10)')
-    parser.add_argument('--resume', default='', type=str,
+    parser.add_argument('--resume', default='/save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar', type=str,
                         help='path to  latest checkpoint (default: None)')
     parser.add_argument('--pretrained', dest='pretrained', action='store_true',
                         help='use pretrained model')
