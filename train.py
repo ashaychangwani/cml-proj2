@@ -125,7 +125,7 @@ def run_training(args):
     else:
         writer = None
     if args.dataset == 'cifar100':
-        model = models.__dict__[args.arch](num_classes=100)
+        model = models.__dict__[args.arch](num_classes=1000)
     else:
         raise NotImplementedError
     model.to(args.device)

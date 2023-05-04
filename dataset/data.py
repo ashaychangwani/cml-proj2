@@ -20,6 +20,7 @@ def prepare_cifar100_train_dataset(data_dir, dataset='cifar100', batch_size=128,
                             std=[0.229, 0.224, 0.225]),
     ])
     train_dataset = torchvision.datasets.ImageNet(root=data_dir, split='train', transform=train_transform)
+    print(train_dataset.classes)
     return train_dataset
 
 def prepare_cifar100_test_dataset(data_dir, dataset='cifar100', batch_size=128, 
