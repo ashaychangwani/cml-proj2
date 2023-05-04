@@ -88,6 +88,7 @@ def main():
     if args.cmd == 'train':
         logging.info('start training {}'.format(args.arch))
         run_training(args)
+        print("Done training")
     
     elif args.cmd == 'test':
         logging.info('start evaluating {} with checkpoints from {}'.format(
@@ -152,6 +153,9 @@ def run_training(args):
 
         adjust_learning_rate(args, optimizer, current_epoch)
         for i, (input, target) in enumerate(train_loader):
+            if i >= 1000:
+                print("Breaking out of the loop")
+                break
             data_time.update(time.time() - end)
             
             target = target.squeeze().long().to(args.device)
@@ -246,19 +250,21 @@ def run_training(args):
                                 loss=total_losses,
                                 top1=top1)
                 ) 
-        prec1 = validate(args, test_loader, model, criterion, writer, current_epoch)
-        is_best = prec1 > best_prec1
-        best_prec1 = max(prec1, best_prec1)
-        print("best: ", best_prec1)
-        checkpoint_path = os.path.join(args.save_path, 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
-        save_checkpoint({
-            'epoch': current_epoch,
-            'arch': args.arch,
-            'state_dict': model.state_dict(),
-            'best_prec1': best_prec1,
-            }, is_best, filename=checkpoint_path)
-        shutil.copyfile(checkpoint_path, os.path.join(args.save_path, 'checkpoint_latest.pth.tar'))
+        print("Done with epochs")
+        # prec1 = validate(args, test_loader, model, criterion, writer, current_epoch)
+        # is_best = prec1 > best_prec1
+        # best_prec1 = max(prec1, best_prec1)
+        # print("best: ", best_prec1)
+        # checkpoint_path = os.path.join(args.save_path, 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
+        # save_checkpoint({
+        #     'epoch': current_epoch,
+        #     'arch': args.arch,
+        #     'state_dict': model.state_dict(),
+        #     'best_prec1': best_prec1,
+        #     }, is_best, filename=checkpoint_path)
+        # shutil.copyfile(checkpoint_path, os.path.join(args.save_path, 'checkpoint_latest.pth.tar'))
         torch.cuda.empty_cache()
+        print("Done clearing cache")
 
 
         
