@@ -285,18 +285,18 @@ def run_training(args):
                                 loss=total_losses,
                                 top1=top1)
                 ) 
-        prec1 = validate(args, test_loader, model, criterion, writer, current_epoch)
-        is_best = prec1 > best_prec1
-        best_prec1 = max(prec1, best_prec1)
-        print("best: ", best_prec1)
-        checkpoint_path = os.path.join(args.save_path, 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
-        save_checkpoint({
-            'epoch': current_epoch,
-            'arch': args.arch,
-            'state_dict': model.state_dict(),
-            'best_prec1': best_prec1,
-            }, is_best, filename=checkpoint_path)
-        shutil.copyfile(checkpoint_path, os.path.join(args.save_path, 'checkpoint_latest.pth.tar'))
+        # prec1 = validate(args, test_loader, model, criterion, writer, current_epoch)
+        # is_best = prec1 > best_prec1
+        # best_prec1 = max(prec1, best_prec1)
+        # print("best: ", best_prec1)
+        # checkpoint_path = os.path.join(args.save_path, 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
+        # save_checkpoint({
+        #     'epoch': current_epoch,
+        #     'arch': args.arch,
+        #     'state_dict': model.state_dict(),
+        #     'best_prec1': best_prec1,
+        #     }, is_best, filename=checkpoint_path)
+        # shutil.copyfile(checkpoint_path, os.path.join(args.save_path, 'checkpoint_latest.pth.tar'))
         torch.cuda.empty_cache()
 
 
