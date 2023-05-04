@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: train-pod
+spec:
+  template:
+    spec:
+      containers:
+      - name: train-pod
+        imagePullPolicy: Always
+        image: ashayc/proj-train
+        command: ["python3", "train.py", "--epochs", "1"]
+        volumeMounts:
+        - name: ac8832-proj-volume
+          mountPath: /saved-models
+      restartPolicy: Never
+      volumes:
+        - name: ac8832-proj-volume
+          persistentVolumeClaim:
+            claimName: ac8832-proj-pvc
