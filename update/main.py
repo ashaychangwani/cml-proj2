@@ -14,11 +14,11 @@ app = FastAPI()
 @app.post("/update")
 async def update_model(dataset: UploadFile = File(...)):
     
-    temp_dataset_path = "save_checkpoints/multi_resnet50_kd/temp-dataset.tar.gz"
+    temp_dataset_path = "/save_checkpoints/multi_resnet50_kd/temp-dataset.tar.gz"
     with open(temp_dataset_path, "wb") as buffer:
         buffer.write(await dataset.read())
 
-    asyncio.create_task(update.update_model("save_checkpoints/multi_resnet50_kd/"))
+    asyncio.create_task(update.update_model("/save_checkpoints/multi_resnet50_kd/"))
     return {"message": "Model is being updated in the background"} 
 
 @app.post("/predict")

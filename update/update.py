@@ -17,7 +17,7 @@ def update_model(data_dir):
     model = models.__dict__['multi_resnet50_kd'](num_classes=100)
     model = torch.nn.DataParallel(model).to('cpu')
 
-    checkpoint_path = 'save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
+    checkpoint_path = '/save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
     if os.path.isfile(checkpoint_path):
         print("=> loading checkpoint")
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
@@ -146,13 +146,13 @@ def update_model(data_dir):
                             top1=top1)
             ) 
 
-        checkpoint_path = os.path.join('save_checkpoints/multi_resnet50_kd/', 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
+        checkpoint_path = os.path.join('/save_checkpoints/multi_resnet50_kd/', 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
         save_checkpoint({
             'epoch': current_epoch,
             'arch': 'multi_resnet50_kd',
             'state_dict': model.state_dict(),
         }, filename=checkpoint_path)
-        shutil.copyfile(checkpoint_path, os.path.join('save_checkpoints/multi_resnet50_kd/', 'checkpoint_latest.pth.tar'))
+        shutil.copyfile(checkpoint_path, os.path.join('/save_checkpoints/multi_resnet50_kd/', 'checkpoint_latest.pth.tar'))
 
 
 def adjust_learning_rate(optimizer, epoch):
@@ -233,7 +233,7 @@ def predict_class(image, device='cpu'):
     image = transform(image).unsqueeze(0).to(device)
     model = models.__dict__['multi_resnet50_kd'](num_classes=100)
     model = torch.nn.DataParallel(model).to('cpu')
-    checkpoint_path = 'save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
+    checkpoint_path = '/save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
     
     
     checkpoint = torch.load(checkpoint_path, map_location='cpu')
