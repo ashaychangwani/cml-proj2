@@ -97,7 +97,7 @@ def main():
 def run_training(args):
     writer = SummaryWriter(args.summary_folder)
     if args.dataset == 'cifar100':
-        model = models.__dict__[args.arch](num_classes=100)
+        model = models.__dict__[args.arch](num_classes=1000)
     else:
         raise NotImplementedError
     model = torch.nn.DataParallel(model).to(args.device)
