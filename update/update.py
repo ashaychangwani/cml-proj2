@@ -8,6 +8,7 @@ import os
 import time
 import logging
 import torch.nn.functional as F
+from PIL import Image
 
 
 
@@ -16,7 +17,7 @@ async def update_model(data_dir):
     model = models.__dict__['multi_resnet50_kd'](num_classes=100)
     model = torch.nn.DataParallel(model).to('cpu')
 
-    checkpoint_path = '/save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
+    checkpoint_path = 'save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
     if os.path.isfile(checkpoint_path):
         print("=> loading checkpoint")
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
@@ -145,13 +146,13 @@ async def update_model(data_dir):
                             top1=top1)
             ) 
 
-        checkpoint_path = os.path.join('/save_checkpoints/multi_resnet50_kd/', 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
+        checkpoint_path = os.path.join('save_checkpoints/multi_resnet50_kd/', 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
         save_checkpoint({
             'epoch': current_epoch,
             'arch': 'multi_resnet50_kd',
             'state_dict': model.state_dict(),
         }, filename=checkpoint_path)
-        shutil.copyfile(checkpoint_path, os.path.join('/save_checkpoints/multi_resnet50_kd/', 'checkpoint_latest.pth.tar'))
+        shutil.copyfile(checkpoint_path, os.path.join('save_checkpoints/multi_resnet50_kd/', 'checkpoint_latest.pth.tar'))
 
 
 def adjust_learning_rate(optimizer, epoch):
@@ -218,3 +219,28 @@ class AverageMeter(object):
 def feature_loss_function(fea, target_fea):
     loss = (fea - target_fea)**2 * ((fea > 0) | (target_fea > 0)).float()
     return torch.abs(loss).sum()
+
+def predict_class(image, device='cpu'):
+    # Load image and apply transformations
+    transform = transforms.Compose([
+        transforms.Resize(32),
+        transforms.CenterCrop(32),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+    image = transform(image).unsqueeze(0).to(device)
+    model = models.__dict__['multi_resnet50_kd'](num_classes=100)
+    model = torch.nn.DataParallel(model).to('cpu')
+    checkpoint_path = 'save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar'
+    
+    
+    checkpoint = torch.load(checkpoint_path, map_location='cpu')
+    model.load_state_dict(checkpoint['state_dict'])
+
+    # Make prediction
+    model.eval()
+    with torch.no_grad():
+        output, _, _, _, _, _, _, _ = model(image)
+        _, predicted_class = torch.max(output.data, 1)
+    
+    return predicted_class.item()
