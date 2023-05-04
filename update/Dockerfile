@@ -14,7 +14,7 @@ COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
 
-COPY save_checkpoints/multi_resnet50_kd ./save_checkpoints
+COPY save_checkpoints /save_checkpoints
 
 COPY main.py .
 COPY models.py .
