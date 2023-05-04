@@ -7,6 +7,7 @@ import time
 import logging
 import models.resnet as models
 from dataset.data import *
+import shutil
 
 def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch CIFAR10 training')
