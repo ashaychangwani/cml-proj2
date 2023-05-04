@@ -12,7 +12,7 @@ from PIL import Image
 
 
 
-async def update_model(data_dir):
+def update_model(data_dir):
     print("starting to update the model")
     model = models.__dict__['multi_resnet50_kd'](num_classes=100)
     model = torch.nn.DataParallel(model).to('cpu')
@@ -219,7 +219,9 @@ class AverageMeter(object):
 def feature_loss_function(fea, target_fea):
     loss = (fea - target_fea)**2 * ((fea > 0) | (target_fea > 0)).float()
     return torch.abs(loss).sum()
-
+def get_cifar100_class_names():
+    class_names = ['apple', 'aquarium_fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'beetle', 'bicycle', 'bottle', 'bowl', 'boy', 'bridge', 'bus', 'butterfly', 'camel', 'can', 'castle', 'caterpillar', 'cattle', 'chair', 'chimpanzee', 'clock', 'cloud', 'cockroach', 'couch', 'crab', 'crocodile', 'cup', 'dinosaur', 'dolphin', 'elephant', 'flatfish', 'forest', 'fox', 'girl', 'hamster', 'house', 'kangaroo', 'keyboard', 'lamp', 'lawn_mower', 'leopard', 'lion', 'lizard', 'lobster', 'man', 'maple_tree', 'motorcycle', 'mountain', 'mouse', 'mushroom', 'oak_tree', 'orange', 'orchid', 'otter', 'palm_tree', 'pear', 'pickup_truck', 'pine_tree', 'plain', 'plate', 'poppy', 'porcupine', 'possum', 'rabbit', 'raccoon', 'ray', 'road', 'rocket', 'rose', 'sea', 'seal', 'shark', 'shrew', 'skunk', 'skyscraper', 'snail', 'snake', 'spider', 'squirrel', 'streetcar', 'sunflower', 'sweet_pepper', 'table', 'tank', 'telephone', 'television', 'tiger', 'tractor', 'train', 'trout', 'tulip', 'turtle', 'wardrobe', 'whale', 'willow_tree', 'wolf', 'woman', 'worm']
+    return class_names
 def predict_class(image, device='cpu'):
     # Load image and apply transformations
     transform = transforms.Compose([
@@ -242,5 +244,5 @@ def predict_class(image, device='cpu'):
     with torch.no_grad():
         output, _, _, _, _, _, _, _ = model(image)
         _, predicted_class = torch.max(output.data, 1)
-    
-    return predicted_class.item()
+    class_names = get_cifar100_class_names()
+    return class_names[predicted_class.item()]
