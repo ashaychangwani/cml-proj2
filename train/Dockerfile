@@ -1,14 +1,19 @@
-FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+FROM python:3.10
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-        && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+RUN apt-get install -y libjpeg-dev
+RUN apt-get install -y libpng-dev
+RUN apt-get install -y libwebp-dev
+RUN apt-get install -y python3-pip
+RUN pip3 install --upgrade pip
 
-WORKDIR /app
-COPY . /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install torch torchvision
 
-CMD ["python", "train.py", "train"]
+
+COPY dataset dataset
+COPY models models
+
+COPY train.py .
+
+CMD ["python", "train.py"]

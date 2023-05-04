@@ -19,13 +19,13 @@ def parse_args():
     parser.add_argument('--dataset', '-d', type=str, default='cifar100',
                         choices=['cifar10', 'cifar100'],
                         help='dataset choice')
-    parser.add_argument('--workers', default=8, type=int, metavar='N',
+    parser.add_argument('--workers', default=4, type=int, metavar='N',
                         help='number of data loading workers (default: 4 )')
     parser.add_argument('--epoch', default=200, type=int,
                         help='number of total iterations (default: 64,000)')
     parser.add_argument('--start-epoch', default=0, type=int,
                         help='manual iter number (useful on restarts)')
-    parser.add_argument('--batch-size', default=64, type=int,
+    parser.add_argument('--batch-size', default=32, type=int,
                         help='mini-batch size (default: 128)')
     parser.add_argument('--lr', default=0.1, type=float,
                         help='initial learning rate')
@@ -202,7 +202,7 @@ def run_training(args):
                                 loss=total_losses,
                                 top1=top1)
                 ) 
-
+        print("Out of the loop")
         checkpoint_path = os.path.join(args.save_path, 'checkpoint_{:05d}.pth.tar'.format(current_epoch))
         save_checkpoint({
             'epoch': current_epoch,
