@@ -12,7 +12,7 @@ from PIL import Image
 
 
 
-def update_model(data_dir):
+async def update_model(data_dir):
     print("starting to update the model")
     model = models.__dict__['multi_resnet50_kd'](num_classes=100)
     model = torch.nn.DataParallel(model).to('cpu')

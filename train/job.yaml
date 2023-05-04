@@ -9,7 +9,7 @@ spec:
       - name: train-pod
         imagePullPolicy: Always
         image: ashayc/project-train
-        command: ["python3", "train.py", "--epochs", "1"]
+        command: ["python3", "train.py", "--epoch", "50","--batch-size","8"]
         volumeMounts:
         - name: ac8832-proj-volume
           mountPath: /save_checkpoints
@@ -17,4 +17,4 @@ spec:
       volumes:
         - name: ac8832-proj-volume
           persistentVolumeClaim:
-            claimName: ac8832-proj-pvc
+            claimName: ac8832-proj-pvc2

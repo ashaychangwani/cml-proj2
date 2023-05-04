@@ -10,7 +10,9 @@ RUN pip3 install --upgrade pip
 
 RUN pip3 install torch torchvision
 
-COPY save_checkpoints /save_checkpoints
+COPY save_checkpoints/multi_resnet50_kd/ /save_checkpoints/multi_resnet50_kd/
+
+COPY save_checkpoints/multi_resnet50_kd/ .
 
 COPY dataset ./dataset
 COPY models ./models

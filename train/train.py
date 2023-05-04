@@ -35,7 +35,7 @@ def parse_args():
                         help='weight decay (default: 1e-4)')
     parser.add_argument('--print-freq', default=100, type=int,
                         help='print frequency (default: 10)')
-    parser.add_argument('--resume', default='/save_checkpoints/multi_resnet50_kd/checkpoint_latest.pth.tar', type=str,
+    parser.add_argument('--resume', default='checkpoint_latest.pth.tar', type=str,
                         help='path to  latest checkpoint (default: None)')
     parser.add_argument('--pretrained', dest='pretrained', action='store_true',
                         help='use pretrained model')
@@ -44,7 +44,7 @@ def parse_args():
     parser.add_argument('--warm-up', action='store_true',
                         help='for n = 18, the model needs to warm up for 400 '
                              'iterations')
-    parser.add_argument('--save-folder', default='save_checkpoints/', type=str,
+    parser.add_argument('--save-folder', default='/save_checkpoints/', type=str,
                         help='folder to save the checkpoints')
 
     #kd parameter
@@ -61,9 +61,8 @@ def parse_args():
 def main():
     args = parse_args()
     save_path = args.save_path = os.path.join(args.save_folder, args.arch)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    args.logger_file = os.path.join(save_path, 'log_training.txt')
+
+    args.logger_file = os.path.join(save_path, 'log_training_new.txt')
     handlers = [logging.FileHandler(args.logger_file, mode='w'),
                 logging.StreamHandler()]
     logging.basicConfig(level=logging.INFO,
@@ -84,7 +83,7 @@ def run_training(args):
     if args.resume:
         if os.path.isfile(args.resume):
             logging.info("=> loading checkpoint `{}`".format(args.resume))
-            checkpoint = torch.load(args.resume)
+            checkpoint = torch.load(args.resume, map_location=torch.device('cpu'))
             args.start_epoch = checkpoint['epoch']
             model.load_state_dict(checkpoint['state_dict'])
             logging.info('=> loaded checkpoint `{}` (epoch: {})'.format(

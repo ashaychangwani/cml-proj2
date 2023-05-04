@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: project-deploy-pod
-          image: ashayc/mnist-test
+          image: ashayc/project-update
           ports:
             - containerPort: 8000
           volumeMounts:
-            - name: ac8832-mnist-volume
+            - name: ac8832-proj-volume
               mountPath: /saved-models
       volumes:
-        - name: ac8832-mnist-volume
+        - name: ac8832-proj-volume
           persistentVolumeClaim:
-            claimName: ac8832-pvc
+            claimName: ac8832-proj-pvc
