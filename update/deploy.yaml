@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-deploy-pod
+  labels:
+    app: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: project-deploy-pod
+          image: ashayc/mnist-test
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: ac8832-mnist-volume
+              mountPath: /saved-models
+      volumes:
+        - name: ac8832-mnist-volume
+          persistentVolumeClaim:
+            claimName: ac8832-pvc
