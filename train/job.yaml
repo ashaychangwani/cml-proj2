@@ -8,11 +8,11 @@ spec:
       containers:
       - name: train-pod
         imagePullPolicy: Always
-        image: ashayc/proj-train
+        image: ashayc/project-train
         command: ["python3", "train.py", "--epochs", "1"]
         volumeMounts:
         - name: ac8832-proj-volume
-          mountPath: /saved-models
+          mountPath: /save_checkpoints
       restartPolicy: Never
       volumes:
         - name: ac8832-proj-volume
