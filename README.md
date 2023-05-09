@@ -1,4 +1,4 @@
-# cml-proj2
+# Cloud & ML Project 2
 Using the GitHub Repo
 =====================
 
